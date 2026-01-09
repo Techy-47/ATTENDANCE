@@ -64,41 +64,49 @@ const students = [
   { roll: "24100030022", name: "Himanshu Nain" }
 ];
 
-const table = document.getElementById("studentTable");
+const list = document.getElementById("studentList");
+const presentCount = document.getElementById("presentCount");
+const totalCount = document.getElementById("totalCount");
 
-students.forEach((s, i) => {
-  table.innerHTML += `
-    <tr>
-      <td>${i + 1}</td>
-      <td>${s.roll}</td>
-      <td>${s.name}</td>
-      <td>
-        <select onchange="updateCount()">
-          <option value="Present">Present</option>
-          <option value="Absent">Absent</option>
-        </select>
-      </td>
-    </tr>
+totalCount.textContent = students.length;
+
+students.forEach(s => {
+  const div = document.createElement("div");
+  div.className = "student";
+  div.innerHTML = `
+    <div class="info">
+      <div class="avatar">${s.name[0]}</div>
+      <div>${s.name}</div>
+    </div>
+    <div class="toggle"></div>
   `;
+  div.querySelector(".toggle").onclick = () => {
+    div.querySelector(".toggle").classList.toggle("active");
+    updateCount();
+  };
+  list.appendChild(div);
 });
 
 function updateCount() {
-  const selects = document.querySelectorAll("select");
-  let present = 0, absent = 0;
+  presentCount.textContent =
+    document.querySelectorAll(".toggle.active").length;
+}
 
-  selects.forEach(sel => {
-    sel.value === "Present" ? present++ : absent++;
+function clearAll() {
+  document.querySelectorAll(".toggle").forEach(t => t.classList.remove("active"));
+  updateCount();
+}
+
+function printAttendance() {
+  window.print();
+}
+
+document.getElementById("today").textContent =
+  new Date().toDateString();
+
+document.getElementById("search").oninput = e => {
+  const val = e.target.value.toLowerCase();
+  document.querySelectorAll(".student").forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(val) ? "" : "none";
   });
-
-  document.getElementById("presentCount").innerText = present;
-  document.getElementById("absentCount").innerText = absent;
-}
-
-function saveAttendance() {
-  const date = document.getElementById("date").value;
-  if (!date) {
-    alert("Please select a date");
-    return;
-  }
-  alert("Attendance saved for " + date);
-}
+};
