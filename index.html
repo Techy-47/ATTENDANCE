@@ -2,34 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Student Attendance</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance Tracker</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>📋 Student Attendance System</h1>
+  <div class="app">
+    <div class="header">
+      <p class="date" id="today"></p>
+      <h1>Attendance Tracker</h1>
+    </div>
 
-  <div class="controls">
-    <label>Select Date:</label>
-    <input type="date" id="date" />
-    <button onclick="saveAttendance()">Save Attendance</button>
-  </div>
+    <div class="stats">
+      <div class="card">
+        <span>Present</span>
+        <h2 id="presentCount">0</h2>
+      </div>
+      <div class="card">
+        <span>Total</span>
+        <h2 id="totalCount">0</h2>
+      </div>
+    </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Roll No</th>
-        <th>Name</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody id="studentTable"></tbody>
-  </table>
+    <input type="text" id="search" placeholder="Search student..." />
 
-  <div class="summary">
-    <p>✅ Present: <span id="presentCount">0</span></p>
-    <p>❌ Absent: <span id="absentCount">0</span></p>
+    <div id="studentList" class="list"></div>
+
+    <div class="actions">
+      <button class="clear" onclick="clearAll()">Clear All</button>
+      <button class="save" onclick="printAttendance()">Print</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
