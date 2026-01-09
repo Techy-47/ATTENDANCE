@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class Attendance App</title>
+
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin: 0;
+      padding: 10px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 6px;
+      color: #333;
+      font-size: 22px;
+    }
+
+    .date {
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: 600;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    th {
+      background: #4f46e5;
+      color: white;
+      padding: 10px;
+      font-size: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    td {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    td.name {
+      text-align: left;
+      font-weight: 500;
+    }
+
+    input[type="radio"] {
+      transform: scale(1.3);
+      cursor: pointer;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      color: white;
+      width: 180px;
+    }
+
+    .btn-print { background: #16a34a; }
+    .btn-pdf { background: #dc2626; }
+
+    @media (max-width: 600px) {
+      .actions { flex-direction: column; }
+      button { width: 100%; }
+      th, td { font-size: 13px; padding: 6px; }
+    }
+
+    @media (max-width: 480px) {
+      th:nth-child(2),
+      td:nth-child(2) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>📋 Class Attendance</h1>
+  <div class="date">Date: <span id="today"></span></div>
+
+  <div class="table-wrapper">
+    <table id="attendanceTable">
+      <tr>
+        <th>#</th>
+        <th>Roll No</th>
+        <th>Student Name</th>
+        <th>P</th>
+        <th>A</th>
+      </tr>
+    </table>
+  </div>
+
+  <div class="actions">
+    <button class="btn-print" onclick="window.print()">🖨 Print</button>
+    <button class="btn-pdf" onclick="downloadPDF()">⬇ Download PDF</button>
+  </div>
+</div>
+
+<script>
+const students = [
+  ["24100110002","ABHINAV JASSI"],
+  ["24100110003","ADITYA RAJ"],
+  ["24100110004","AKANKSHA"],
+  ["24100110006","ALOK KUMAR SINGH"],
+  ["24100110007","AMAN KUMAR"],
+  ["24100110008","AMRINDER SINGH"],
+  ["24100110009","AMRITPREET SINGH"],
+  ["24100110010","ANIKET KUMAR"],
+  ["24100110011","ANJALI"],
+  ["24100110012","ANKIT KUMAR TYAGI"],
+  ["24100110013","ANKUSH"],
+  ["24100110015","ARUN"],
+  ["24100110016","ARUN SINGH TOMAR"],
+  ["24100110017","ARYAN"],
+  ["24100110021","BALJINDER SINGH"],
+  ["24100110024","BHAWANPREET KAUR"],
+  ["24100110026","BIKRAM DAS"],
+  ["24100110027","CHETAN KUMAR"],
+  ["24100110029","DAMANPREET SINGH"],
+  ["24100110031","DEEPAK KUMAR"],
+  ["24100110032","DEV KARAN"],
+  ["24100110034","DAAHIRYA SHARMA"],
+  ["24100110037","DIPANKAR SUTRADHAR"],
+  ["24100110038","DIVYANSH SHARMA"],
+  ["24100110039","EKTA"],
+  ["24100110040","GAUTAM KUMAR"],
+  ["24100110041","GULSHAN NISHAD"],
+  ["24100110042","GURPREET KAUR"],
+  ["24100110043","GURWINDER SIAN"],
+  ["24100110044","HARIOM YADAV"],
+  ["24100110046","HARSIMRAN SINGH"],
+  ["24100110047","HEENA RANI"],
+  ["24100110048","JASPJIT SINGH"],
+  ["24100110054","JASHANPREET KAUR"],
+  ["24100110055","JASKARAN SINGH"],
+  ["24100110056","JASWINDER SINGH"],
+  ["24100110057","KANCHAN 53"],
+  ["24100110058","LOVEPREET SINGH CHAHAL"],
+  ["24100110059","MADHAV SHARMA"],
+  ["24100110061","MANU KUMAR"],
+  ["24100110063","MAYANK RAJAWAT"],
+  ["24100110064","MEHAK"],
+  ["24100110065","MITHLESH KUMAR"],
+  ["24100110066","MOHIT KUMAR MALLI"],
+  ["24100110067","MUSKAN"],
+  ["24100110069","NISHANT"],
+  ["24100110070","NISHANT DHIMAN"],
+  ["24100110073","RAJWINDER KAUR"],
+  ["24100110095","SHIV SAGAR KUMAR"],
+  ["24100110113","VINIT"],
+  ["24100110119","ABHISHEK KUMAR PAL"],
+  ["24100110122","ROHIT KUMAR"],
+  ["24100110124","SURAJ PRAKASH"],
+  ["2410030009","ANANDITA"],
+  ["—","PRNAV GUPTA"],
+  ["—","ARMANPREET SINGH"],
+  ["—","SHAHID MUSHTAQ"],
+  ["—","PRIYANSHU"],
+  ["—","SAMEER TIWARI"],
+  ["—","AVIRAJ CHETRY"],
+  ["—","YASH RAJ"],
+  ["—","KISHAN GUPTA"],
+  ["—","HIMANSHU NAIAN"]
+];
+
+const table = document.getElementById("attendanceTable");
+
+students.forEach((s, i) => {
+  const row = table.insertRow();
+  row.innerHTML = `
+    <td>${i + 1}</td>
+    <td>${s[0]}</td>
+    <td class="name">${s[1]}</td>
+    <td><input type="radio" name="att${i}" checked></td>
+    <td><input type="radio" name="att${i}"></td>
+  `;
+});
+
+const today = new Date();
+document.getElementById("today").innerText = today.toDateString();
+
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text("Class Attendance - " + today.toDateString(), 10, 10);
+
+  let y = 20;
+  students.forEach((s, i) => {
+    const radios = document.querySelectorAll(`input[name=att${i}]`);
+    const present = radios[0].checked;
+    doc.text(`${i + 1}. ${s[1]} - ${present ? "Present" : "Absent"}`, 10, y);
+    y += 7;
+    if (y > 280) { doc.addPage(); y = 10; }
+  });
+
+  doc.save("attendance.pdf");
+}
+</script>
+
+</body>
+</html>
