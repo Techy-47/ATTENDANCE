@@ -1,0 +1,51 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #f4f6f8;
+}
+
+h1 {
+  text-align: center;
+}
+
+.controls {
+  margin: 20px 0;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background: #007bff;
+  color: white;
+}
+
+.present {
+  background-color: #d4edda;
+}
+
+.absent {
+  background-color: #f8d7da;
+}
+
+button {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.summary {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 18px;
+}
