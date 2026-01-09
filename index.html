@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Class Attendance App</title>
 
-  <!-- jsPDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
   <style>
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -27,22 +24,19 @@
 
     h1 {
       text-align: center;
-      margin-bottom: 6px;
-      color: #333;
       font-size: 22px;
+      margin-bottom: 6px;
     }
 
     .date {
       text-align: center;
-      margin-bottom: 15px;
       font-weight: 600;
-      color: #555;
+      margin-bottom: 15px;
       font-size: 14px;
     }
 
     .table-wrapper {
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
     }
 
     table {
@@ -55,17 +49,15 @@
       background: #4f46e5;
       color: white;
       padding: 10px;
-      font-size: 14px;
       position: sticky;
       top: 0;
-      z-index: 2;
     }
 
     td {
       padding: 8px;
       border-bottom: 1px solid #eee;
-      font-size: 14px;
       text-align: center;
+      font-size: 14px;
     }
 
     td.name {
@@ -81,29 +73,25 @@
     .actions {
       display: flex;
       gap: 10px;
+      margin-top: 20px;
       justify-content: center;
-      margin-top: 15px;
       flex-wrap: wrap;
     }
 
     button {
-      padding: 12px 18px;
-      border: none;
+      padding: 12px;
+      font-size: 14px;
       border-radius: 10px;
-      font-size: 15px;
+      border: none;
       cursor: pointer;
-      color: white;
-      width: 180px;
+      color: #fff;
+      width: 100%;
+      max-width: 280px;
     }
 
-    .btn-print { background: #16a34a; }
-    .btn-pdf { background: #dc2626; }
-
-    @media (max-width: 600px) {
-      .actions { flex-direction: column; }
-      button { width: 100%; }
-      th, td { font-size: 13px; padding: 6px; }
-    }
+    .present-btn { background: #16a34a; }
+    .absent-btn { background: #dc2626; }
+    .print-btn { background: #2563eb; }
 
     @media (max-width: 480px) {
       th:nth-child(2),
@@ -131,9 +119,11 @@
     </table>
   </div>
 
+  <!-- ONLY REQUIRED OPTIONS -->
   <div class="actions">
-    <button class="btn-print" onclick="window.print()">🖨 Print</button>
-    <button class="btn-pdf" onclick="downloadPDF()">⬇ Download PDF</button>
+    <button class="present-btn" onclick="copyPresent()">📋 Copy Present Students</button>
+    <button class="absent-btn" onclick="copyAbsent()">📋 Copy Absent Students</button>
+    <button class="print-btn" onclick="window.print()">🖨 Print Attendance</button>
   </div>
 </div>
 
@@ -217,24 +207,28 @@ students.forEach((s, i) => {
   `;
 });
 
-const today = new Date();
-document.getElementById("today").innerText = today.toDateString();
+document.getElementById("today").innerText = new Date().toDateString();
 
-function downloadPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  doc.text("Class Attendance - " + today.toDateString(), 10, 10);
-
-  let y = 20;
+function copyPresent() {
+  let list = "";
   students.forEach((s, i) => {
-    const radios = document.querySelectorAll(`input[name=att${i}]`);
-    const present = radios[0].checked;
-    doc.text(`${i + 1}. ${s[1]} - ${present ? "Present" : "Absent"}`, 10, y);
-    y += 7;
-    if (y > 280) { doc.addPage(); y = 10; }
+    if (document.querySelectorAll(`input[name=att${i}]`)[0].checked) {
+      list += `- ${s[1]}\n`;
+    }
   });
+  navigator.clipboard.writeText(list.trim());
+  alert("Present students copied!");
+}
 
-  doc.save("attendance.pdf");
+function copyAbsent() {
+  let list = "";
+  students.forEach((s, i) => {
+    if (document.querySelectorAll(`input[name=att${i}]`)[1].checked) {
+      list += `- ${s[1]}\n`;
+    }
+  });
+  navigator.clipboard.writeText(list.trim());
+  alert("Absent students copied!");
 }
 </script>
 
