@@ -194,7 +194,10 @@ button{
   <div class="actions">
     <button onclick="clearAll()">Clear All</button>
     <button class="print" onclick="window.print()">Print</button>
+    <button onclick="saveAttendance()">Save to Google Sheet</button>
+
   </div>
+  
 </div>
 
 <script>
@@ -343,6 +346,37 @@ searchInput.addEventListener("input", () => {
     }
   });
 });
+
+function saveAttendance() {
+  const subject = prompt("Enter Subject Name:");
+  if (!subject) {
+    alert("Subject is required!");
+    return;
+  }
+
+  const studentsData = [];
+
+  document.querySelectorAll(".student").forEach(s => {
+    studentsData.push({
+      roll: s.querySelector(".roll").textContent,
+      name: s.querySelector(".name").textContent,
+      status: s.classList.contains("present") ? "Present" : "Absent"
+    });
+  });
+
+  fetch("https://script.google.com/macros/s/AKfycbwD-c9eXLmdLLKj86UcmKqEC36Q7K-eHqW5KXsxulJiD71KbXWn8oqzeBTiEqNRVMBs-g/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      subject: subject,
+      date: new Date().toISOString(),
+      students: studentsData
+    })
+  })
+  .then(res => res.json())
+  .then(() => alert("Attendance saved successfully ✅"))
+  .catch(() => alert("Error saving attendance ❌"));
+}
+
 </script>
 
 </body>
