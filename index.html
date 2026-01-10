@@ -1,40 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Attendance Tracker</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Attendance Tracker</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body{
+  background:#fff;
+  color:#000;
+}
+
+.app{
+  max-width:480px;
+  margin:auto;
+  padding:16px;
+}
+
+.header h1{
+  font-size:26px;
+  margin-top:4px;
+}
+
+.date{
+  font-size:14px;
+  color:#666;
+}
+
+.stats{
+  display:flex;
+  gap:12px;
+  margin:16px 0;
+}
+
+.card{
+  flex:1;
+  background:#f5f5f5;
+  border-radius:16px;
+  padding:14px;
+  text-align:center;
+}
+
+.card span{
+  color:#555;
+  font-size:14px;
+}
+
+.card h2{
+  font-size:28px;
+  margin-top:6px;
+}
+
+#search{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  background:#f5f5f5;
+  border:none;
+  color:#000;
+  margin-bottom:14px;
+}
+
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* student base */
+.student{
+  padding:14px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  cursor:pointer;
+  transition:background 0.2s ease;
+}
+
+/* absent */
+.student.absent{
+  background:#ff4d4d;
+  color:#fff;
+}
+
+/* present */
+.student.present{
+  background:#00e676;
+  color:#fff; /* TEXT WHITE */
+}
+
+.info{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.35);
+  display:grid;
+  place-items:center;
+  font-weight:700;
+  flex-shrink:0;
+  color:#000;
+}
+
+.details{
+  display:flex;
+  flex-direction:column;
+}
+
+.roll{
+  font-size:12px;
+  opacity:0.9;
+}
+
+.name{
+  font-size:15px;
+  font-weight:500;
+}
+
+.toggle{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  border:2px solid #fff; /* white border */
+  flex-shrink:0;
+}
+
+.toggle.active{
+  background:#fff; /* white button */
+  border-color:#fff;
+}
+
+.actions{
+  display:flex;
+  gap:12px;
+  margin-top:18px;
+}
+
+button{
+  flex:1;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.clear{
+  background:#eee;
+}
+
+.save{
+  background:#00e676;
+}
+
+@media print{
+  body{background:#fff;color:#000}
+  .toggle,.actions,#search{display:none}
+}
+</style>
 </head>
+
 <body>
 
-  <div class="app">
-    <div class="header">
-      <p class="date" id="today"></p>
-      <h1>Attendance Tracker</h1>
+<div class="app">
+  <div class="header">
+    <p class="date" id="today"></p>
+    <h1>Attendance Tracker</h1>
+  </div>
+
+  <div class="stats">
+    <div class="card">
+      <span>Present</span>
+      <h2 id="presentCount">0</h2>
     </div>
-
-    <div class="stats">
-      <div class="card">
-        <span>Present</span>
-        <h2 id="presentCount">0</h2>
-      </div>
-      <div class="card">
-        <span>Total</span>
-        <h2 id="totalCount">0</h2>
-      </div>
-    </div>
-
-    <input type="text" id="search" placeholder="Search student..." />
-
-    <div id="studentList" class="list"></div>
-
-    <div class="actions">
-      <button class="clear" onclick="clearAll()">Clear All</button>
-      <button class="save" onclick="printAttendance()">Print</button>
+    <div class="card">
+      <span>Absent</span>
+      <h2 id="absentCount">0</h2>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <input id="search" placeholder="Search by name or roll no..." />
+
+  <div id="studentList" class="list"></div>
+
+  <div class="actions">
+    <button class="clear" onclick="clearAll()">Clear All</button>
+    <button class="save" onclick="window.print()">Print</button>
+  </div>
+</div>
+
+<script>
+const students = [
+  {roll:"24100110002",name:"Abhinav Jassi"},
+  {roll:"24100110003",name:"Aditya Raj"},
+  {roll:"24100110004",name:"Akanksha"},
+  {roll:"24100110006",name:"Alok Kumar Singh"},
+  {roll:"24100110007",name:"Aman Kumar"},
+  {roll:"24100110008",name:"Amrinder Singh"},
+  {roll:"24100110009",name:"Amritpreet Singh"},
+  {roll:"24100110010",name:"Aniket Kumar"},
+  {roll:"24100110011",name:"Anjali"},
+  {roll:"24100110012",name:"Ankit Kumar Tyagi"},
+  {roll:"24100110013",name:"Ankush"},
+  {roll:"24100110015",name:"Arun"},
+  {roll:"24100110016",name:"Arun Singh Tomar"},
+  {roll:"24100110017",name:"Aryan"},
+  {roll:"24100110021",name:"Baljinder Singh"},
+  {roll:"24100110024",name:"Bhawanpreet Kaur"},
+  {roll:"24100110026",name:"Bikram Das"},
+  {roll:"24100110027",name:"Chetan Kumar"},
+  {roll:"24100110029",name:"Damanpreet Singh"},
+  {roll:"24100110031",name:"Deepak Kumar"},
+  {roll:"24100110032",name:"Dev Karan"},
+  {roll:"24100110034",name:"Dhairya Sharma"},
+  {roll:"24100110037",name:"Dipankar Sutradhar"},
+  {roll:"24100110038",name:"Divyansh Sharma"},
+  {roll:"24100110039",name:"Ekta"},
+  {roll:"24100110040",name:"Gautam Kumar"},
+  {roll:"24100110041",name:"Gulshan Nishad"},
+  {roll:"24100110042",name:"Gurpreet Kaur"},
+  {roll:"24100110043",name:"Gurwinder Sian"},
+  {roll:"24100110044",name:"Hariom Yadav"},
+  {roll:"24100110046",name:"Harsimran Singh"},
+  {roll:"24100110047",name:"Heena Rani"},
+  {roll:"24100110048",name:"Japjit Singh"},
+  {roll:"24100110049",name:"Jashanpreet Kaur"},
+  {roll:"24100110051",name:"Jaskaran Singh"},
+  {roll:"24100110052",name:"Jaswinder Singh"},
+  {roll:"24100110053",name:"Kanchan"},
+  {roll:"24100110058",name:"Lovepreet Singh Chahal"},
+  {roll:"24100110059",name:"Madhav Sharma"},
+  {roll:"24100110061",name:"Manu Kumar"},
+  {roll:"24100110063",name:"Mayank Rajawat"},
+  {roll:"24100110064",name:"Mehak"},
+  {roll:"24100110065",name:"Mithlesh Kumar"},
+  {roll:"24100110066",name:"Mohit Kumar Malli"},
+  {roll:"24100110067",name:"Muskan"},
+  {roll:"24100110069",name:"Nishant"},
+  {roll:"24100110070",name:"Nishant Dhiman"},
+  {roll:"24100110079",name:"Rajwinder Kaur"},
+  {roll:"24100110095",name:"Shiv Sagar Kumar"},
+  {roll:"24100110113",name:"Vinit"},
+  {roll:"24100110119",name:"Abhishek Kumar Pal"},
+  {roll:"24100110122",name:"Rohit Kumar"},
+  {roll:"24100030009",name:"Anandita Ojha"},
+  {roll:"24100030010",name:"Aviraj Chetry"},
+  {roll:"25100111001",name:"Armanpreet Singh"},
+  {roll:"25100111002",name:"Dev Soni"},
+  {roll:"25100111003",name:"Kishan Gupta"},
+  {roll:"25100111005",name:"Pranav Gupta"},
+  {roll:"25100111006",name:"Priyanshu Tiwari"},
+  {roll:"25100111007",name:"Sameer Tiwari"},
+  {roll:"25100111008",name:"Shahid Mushtaq"},
+  {roll:"25100111009",name:"Yash Raj"},
+  {roll:"24100030022",name:"Himanshu Nain"}
+];
+
+const list = document.getElementById("studentList");
+const presentCount = document.getElementById("presentCount");
+const absentCount = document.getElementById("absentCount");
+
+function render(){
+  presentCount.textContent =
+    document.querySelectorAll(".student.present").length;
+  absentCount.textContent =
+    students.length - document.querySelectorAll(".student.present").length;
+}
+
+students.forEach(s=>{
+  const div = document.createElement("div");
+  div.className = "student absent";
+  div.innerHTML = `
+    <div class="info">
+      <div class="avatar">${s.name[0]}</div>
+      <div class="details">
+        <div class="roll">${s.roll}</div>
+        <div class="name">${s.name}</div>
+      </div>
+    </div>
+    <div class="toggle"></div>
+  `;
+
+  div.onclick = () => {
+    div.classList.toggle("present");
+    div.classList.toggle("absent");
+    div.querySelector(".toggle").classList.toggle("active");
+    render();
+  };
+
+  list.appendChild(div);
+});
+
+function clearAll(){
+  document.querySelectorAll(".student").forEach(s=>{
+    s.classList.remove("present");
+    s.classList.add("absent");
+    s.querySelector(".toggle").classList.remove("active");
+  });
+  render();
+}
+
+document.getElementById("search").oninput = e=>{
+  const v = e.target.value.toLowerCase();
+  document.querySelectorAll(".student").forEach(c=>{
+    c.style.display = c.innerText.toLowerCase().includes(v) ? "" : "none";
+  });
+};
+
+document.getElementById("today").textContent =
+  new Date().toDateString();
+
+render();
+</script>
+
 </body>
 </html>
