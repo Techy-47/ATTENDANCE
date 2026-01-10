@@ -140,7 +140,7 @@
       margin-top: 20px;
     }
 
-    .actions{
+    .actions {
       margin-bottom: 10px;
     }
 
@@ -161,7 +161,7 @@
 
     #saveBtn,
     .copy-present,
-    .copy-absent{
+    .copy-absent {
       font-weight: 500;
     }
 
@@ -241,43 +241,84 @@
 
   </div>
 
-<script>
-  const SECRET_KEY = "FRONTIER123";
-  // const ADMIN_KEY = "ADMIN456";
+  <script>
+    const SECRET_KEY = "FRONTIER123";
 
-  const students = [
-    { roll: "24100110030", name: "Deepak Kumar" },
-{ roll: "24100110031", name: "Devansh Sharma" },
-{ roll: "24100110032", name: "Dhruv Verma" },
-{ roll: "24100110033", name: "Divya Gupta" },
-{ roll: "24100110034", name: "Gagandeep Singh" },
-{ roll: "24100110035", name: "Harsh Vardhan" },
-{ roll: "24100110036", name: "Himanshu Rana" },
-{ roll: "24100110037", name: "Ishita Malhotra" },
-{ roll: "24100110038", name: "Jaspreet Kaur" },
-{ roll: "24100110039", name: "Karan Mehta" },
-{ roll: "24100110040", name: "Kritika Jain" },
-{ roll: "24100110041", name: "Manpreet Singh" },
-{ roll: "24100110042", name: "Mohit Aggarwal" },
-{ roll: "24100110043", name: "Nikhil Sharma" },
-{ roll: "24100110044", name: "Pankaj Yadav" },
-{ roll: "24100110045", name: "Pranav Mishra" },
-{ roll: "24100110046", name: "Ritika Arora" },
-{ roll: "24100110047", name: "Rohit Choudhary" },
-{ roll: "24100110048", name: "Sakshi Kapoor" },
-{ roll: "24100110049", name: "Shubham Tiwari" }
+    const students = [
+      { roll: "24100110002", name: "Abhinav Jassi" },
+      { roll: "24100110003", name: "Aditya Raj" },
+      { roll: "24100110004", name: "Akanksha" },
+      { roll: "24100110006", name: "Alok Kumar Singh" },
+      { roll: "24100110007", name: "Aman Kumar" },
+      { roll: "24100110008", name: "Amrinder Singh" },
+      { roll: "24100110009", name: "Amritpreet Singh" },
+      { roll: "24100110010", name: "Aniket Kumar" },
+      { roll: "24100110011", name: "Anjali" },
+      { roll: "24100110012", name: "Ankit Kumar Tyagi" },
+      { roll: "24100110013", name: "Ankush" },
+      { roll: "24100110015", name: "Arun" },
+      { roll: "24100110016", name: "Arun Singh Tomar" },
+      { roll: "24100110017", name: "Aryan" },
+      { roll: "24100110021", name: "Baljinder Singh" },
+      { roll: "24100110024", name: "Bhawanpreet Kaur" },
+      { roll: "24100110026", name: "Bikram Das" },
+      { roll: "24100110027", name: "Chetan Kumar" },
+      { roll: "24100110029", name: "Damanpreet Singh" },
+      { roll: "24100110031", name: "Deepak Kumar" },
+      { roll: "24100110032", name: "Dev Karan" },
+      { roll: "24100110034", name: "Dhairya Sharma" },
+      { roll: "24100110037", name: "Dipankar Sutradhar" },
+      { roll: "24100110038", name: "Divyansh Sharma" },
+      { roll: "24100110039", name: "Ekta" },
+      { roll: "24100110040", name: "Gautam Kumar" },
+      { roll: "24100110041", name: "Gulshan Nishad" },
+      { roll: "24100110042", name: "Gurpreet Kaur" },
+      { roll: "24100110043", name: "Gurwinder Sian" },
+      { roll: "24100110044", name: "Hariom Yadav" },
+      { roll: "24100110046", name: "Harsimran Singh" },
+      { roll: "24100110047", name: "Heena Rani" },
+      { roll: "24100110048", name: "Japjit Singh" },
+      { roll: "24100110049", name: "Jashanpreet Kaur" },
+      { roll: "24100110051", name: "Jaskaran Singh" },
+      { roll: "24100110052", name: "Jaswinder Singh" },
+      { roll: "24100110053", name: "Kanchan" },
+      { roll: "24100110058", name: "Lovepreet Singh Chahal" },
+      { roll: "24100110059", name: "Madhav Sharma" },
+      { roll: "24100110061", name: "Manu Kumar" },
+      { roll: "24100110063", name: "Mayank Rajawat" },
+      { roll: "24100110064", name: "Mehak" },
+      { roll: "24100110065", name: "Mithlesh Kumar" },
+      { roll: "24100110066", name: "Mohit Kumar Malli" },
+      { roll: "24100110067", name: "Muskan" },
+      { roll: "24100110069", name: "Nishant" },
+      { roll: "24100110070", name: "Nishant Dhiman" },
+      { roll: "24100110079", name: "Rajwinder Kaur" },
+      { roll: "24100110095", name: "Shiv Sagar Kumar" },
+      { roll: "24100110113", name: "Vinit" },
+      { roll: "24100110119", name: "Abhishek Kumar Pal" },
+      { roll: "24100110122", name: "Rohit Kumar" },
+      { roll: "24100030009", name: "Anandita Ojha" },
+      { roll: "24100030010", name: "Aviraj Chetry" },
+      { roll: "25100111001", name: "Armanpreet Singh" },
+      { roll: "25100111002", name: "Dev Soni" },
+      { roll: "25100111003", name: "Kishan Gupta" },
+      { roll: "25100111005", name: "Pranav Gupta" },
+      { roll: "25100111006", name: "Priyanshu Tiwari" },
+      { roll: "25100111007", name: "Sameer Tiwari" },
+      { roll: "25100111008", name: "Shahid Mushtaq" },
+      { roll: "25100111009", name: "Yash Raj" },
+      { roll: "24100030022", name: "Himanshu Nain" }
+    ];
 
-  ];
+    const list = document.getElementById("studentList");
+    const presentCount = document.getElementById("presentCount");
+    const absentCount = document.getElementById("absentCount");
 
-  const list = document.getElementById("studentList");
-  const presentCount = document.getElementById("presentCount");
-  const absentCount = document.getElementById("absentCount");
-
-  // Render students
-  students.forEach(s => {
-    const d = document.createElement("div");
-    d.className = "student absent";
-    d.innerHTML = `
+    // Render students
+    students.forEach(s => {
+      const d = document.createElement("div");
+      d.className = "student absent";
+      d.innerHTML = `
       <div class="info">
         <div class="avatar">${s.name[0]}</div>
         <div class="details">
@@ -288,100 +329,91 @@
       </div>
       <div class="toggle"></div>
     `;
-    d.onclick = () => {
-      d.classList.toggle("present");
-      d.classList.toggle("absent");
-      d.querySelector(".toggle").classList.toggle("active");
-      d.querySelector(".status").textContent =
-        d.classList.contains("present") ? "Present" : "Absent";
+      d.onclick = () => {
+        d.classList.toggle("present");
+        d.classList.toggle("absent");
+        d.querySelector(".toggle").classList.toggle("active");
+        d.querySelector(".status").textContent =
+          d.classList.contains("present") ? "Present" : "Absent";
+        update();
+      };
+      list.appendChild(d);
+    });
+
+    function update() {
+      const p = document.querySelectorAll(".student.present").length;
+      presentCount.textContent = p;
+      absentCount.textContent = students.length - p;
+    }
+
+    function clearAll() {
+      document.querySelectorAll(".student").forEach(s => {
+        s.classList.remove("present");
+        s.classList.add("absent");
+        s.querySelector(".status").textContent = "Absent";
+        s.querySelector(".toggle").classList.remove("active");
+      });
       update();
-    };
-    list.appendChild(d);
-  });
+    }
 
-  function update() {
-    const p = document.querySelectorAll(".student.present").length;
-    presentCount.textContent = p;
-    absentCount.textContent = students.length - p;
-  }
+    function copyList(type) {
+      const now = new Date();
+      let text = `Frontier (${type === "present" ? "Presentee" : "Absentee"})\n`;
+      text += `Date & Time: ${now.toLocaleString()}\n\n`;
+      const listEls = document.querySelectorAll(`.student.${type}`);
+      text += `Total: ${listEls.length}\n\n`;
+      listEls.forEach(s => {
+        text += `${s.querySelector(".roll").textContent.slice(-5)} - ${s.querySelector(".name").textContent}\n`;
+      });
+      navigator.clipboard.writeText(text);
+      alert("Copied ✅");
+    }
 
-  function clearAll() {
-    document.querySelectorAll(".student").forEach(s => {
-      s.classList.remove("present");
-      s.classList.add("absent");
-      s.querySelector(".status").textContent = "Absent";
-      s.querySelector(".toggle").classList.remove("active");
-    });
+    function saveAttendance() {
+      const subject = prompt("Enter Subject Name:");
+      if (!subject) return alert("Subject is required!");
+
+      const studentsData = [];
+      document.querySelectorAll(".student").forEach(s => {
+        studentsData.push({
+          roll: s.querySelector(".roll").textContent,
+          name: s.querySelector(".name").textContent,
+          status: s.classList.contains("present") ? "Present" : "Absent"
+        });
+      });
+
+      fetch("https://script.google.com/macros/s/AKfycbxYi0v_QfgXKDzLXp0jhmR5-Ey9gdoPic546UDY5O89j5NUIkJo4YKc3OvBl0pplETqpw/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          secret: SECRET_KEY,
+          subject,
+          date: new Date().toISOString(),
+          students: studentsData
+        })
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (!res.success) return alert(res.message || "Error");
+          document.getElementById("saveBtn").disabled = true;
+          document.getElementById("saveBtn").textContent = "Attendance Locked";
+          alert("Attendance saved & locked ✅");
+        })
+        .catch(() => alert("Server error ❌"));
+    }
+
+    document.getElementById("today").textContent = new Date().toDateString();
     update();
-  }
 
-  function copyList(type) {
-    const now = new Date();
-    let text = `Frontier (${type === "present" ? "Presentee" : "Absentee"})\n`;
-    text += `Date & Time: ${now.toLocaleString()}\n\n`;
-    const listEls = document.querySelectorAll(`.student.${type}`);
-    text += `Total: ${listEls.length}\n\n`;
-    listEls.forEach(s => {
-      text += `${s.querySelector(".roll").textContent.slice(-5)} - ${s.querySelector(".name").textContent}\n`;
-    });
-    navigator.clipboard.writeText(text);
-    alert("Copied ✅");
-  }
-
-  function saveAttendance() {
-    const subject = prompt("Enter Subject Name:");
-    if (!subject) return alert("Subject is required!");
-
-    const studentsData = [];
-    document.querySelectorAll(".student").forEach(s => {
-      studentsData.push({
-        roll: s.querySelector(".roll").textContent,
-        name: s.querySelector(".name").textContent,
-        status: s.classList.contains("present") ? "Present" : "Absent"
+    const searchInput = document.getElementById("search");
+    searchInput.addEventListener("input", () => {
+      const value = searchInput.value.toLowerCase();
+      document.querySelectorAll(".student").forEach(s => {
+        const name = s.querySelector(".name").textContent.toLowerCase();
+        const roll = s.querySelector(".roll").textContent.toLowerCase();
+        s.style.display = name.includes(value) || roll.includes(value) ? "flex" : "none";
       });
     });
-
-    fetch("https://script.google.com/macros/s/AKfycbxYi0v_QfgXKDzLXp0jhmR5-Ey9gdoPic546UDY5O89j5NUIkJo4YKc3OvBl0pplETqpw/exec", {
-      method: "POST",
-      body: JSON.stringify({
-        secret: SECRET_KEY,
-        subject,
-        date: new Date().toISOString(),
-        students: studentsData
-      })
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (!res.success) return alert(res.message || "Error");
-        document.getElementById("saveBtn").disabled = true;
-        document.getElementById("saveBtn").textContent = "Attendance Locked";
-        alert("Attendance saved & locked ✅");
-      })
-      .catch(() => alert("Server error ❌"));
-  }
-
-  // function resetAttendance() {
-  //   const key = prompt("Enter Admin Key:");
-  //   if (key !== ADMIN_KEY) return alert("Unauthorized ❌");
-  //   const btn = document.getElementById("saveBtn");
-  //   btn.disabled = false;
-  //   btn.textContent = "Save to Google Sheet";
-  //   alert("Attendance unlocked ✅");
-  // }
-
-  document.getElementById("today").textContent = new Date().toDateString();
-  update();
-
-  const searchInput = document.getElementById("search");
-  searchInput.addEventListener("input", () => {
-    const value = searchInput.value.toLowerCase();
-    document.querySelectorAll(".student").forEach(s => {
-      const name = s.querySelector(".name").textContent.toLowerCase();
-      const roll = s.querySelector(".roll").textContent.toLowerCase();
-      s.style.display = name.includes(value) || roll.includes(value) ? "flex" : "none";
-    });
-  });
-</script>
+  </script>
 
 
 </body>
